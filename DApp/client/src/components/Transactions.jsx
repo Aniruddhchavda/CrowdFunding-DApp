@@ -51,6 +51,13 @@ const TransactionsCard = ( {Name, Category, Description, Location, Amount, Statu
       <div className="flex flex-col items-center w-full mt-3">
         <div className="display-flex justify-start w-full mb-6 p-2">
         <p className="text-white text-base">Account : {Account}</p>
+        <p className="text-white text-base">Name : {Name}</p>
+        <p className="text-white text-base">Category : {Category.toString()}</p>
+        <p className="text-white text-base">Description : {Description}</p>
+        <p className="text-white text-base">Location : {Location}</p>
+        <p className="text-white text-base">Amount : {Amount.toString()}</p>
+        
+        
         </div>
 
         <div className="bg-black p-3 px-5 w-max rounded-3xl -mt-5 shadow-2xl">
@@ -84,10 +91,10 @@ const Transactions = () => {
   const { transactions, currentAccount } = useContext(TransactionContext);
 
   return (
-    <div className="flex w-full justify-center items-center 2xl:px-20 gradient-bg-transactions">
+    <div className="min-h-[90vh] flex w-full justify-center items-center 2xl:px-20 gradient-bg-transactions">
       <div className="flex flex-col md:p-12 py-12 px-4">
         {currentAccount ? (
-          <h3 className="text-white text-3xl text-center my-2">
+          <h3 className="text-white text-5xl text-center my-0">
             Applications
           </h3>
         ) : (

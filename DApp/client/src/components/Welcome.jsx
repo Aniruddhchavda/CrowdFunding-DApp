@@ -34,7 +34,7 @@ const Welcome = () => {
   };
 
   return (
-    <div className="flex w-full justify-center items-center">
+    <div className="flex w-full justify-center items-center min-h-[90vh]">
       <div className="block mf:flex-row flex-col items-start justify-between md:p-20 py-12 px-4">
         <div className="flex flex-1 justify-start items-start flex-col mf:mr-7">
           <h1 className="text-3xl sm:text-5xl text-white py-2">
@@ -44,7 +44,7 @@ const Welcome = () => {
 
 </div>
         <div className="flex flex-col flex-1 items-center justify-start w-full mf:mt-0 mt-10">
-          <div className="p-3 flex justify-end items-start flex-col rounded-xl h-40 sm:w-72 w-full my-5 eth-card .white-glassmorphism ">
+          <div className="p-3 flex justify-end items-start flex-col rounded-xl h-56 sm:w-96 w-full my-5 eth-card .white-glassmorphism ">
             <div className="flex justify-between flex-col w-full h-full">
               <div className="flex justify-between items-start">
                 <div className="w-10 h-10 rounded-full border-2 border-white flex justify-center items-center">
@@ -64,7 +64,18 @@ const Welcome = () => {
           </div>
           <div className="p-5 sm:w-96 w-full flex flex-col justify-start items-center blue-glassmorphism">
             <Input placeholder="name" name="name" type="text" handleChange={handleChange} />
-            <Input placeholder="category" name="category" type="number" handleChange={handleChange} />
+
+            <select name="category" 
+            handleChange={handleChange}
+            onChange={(e) => handleChange(e, name)}
+    className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-1 text-sm "
+            >
+              <option value="1">Medical</option>
+              <option value="2">Educational</option>
+              <option value="3">Travel</option>
+              <option value="4">Emergency</option>
+            </select>
+
             <Input placeholder="description" name="description" type="text" handleChange={handleChange} />
             <Input placeholder="location" name="location" type="text" handleChange={handleChange} />
             <Input placeholder="amount" name="amount" type="number" handleChange={handleChange} />
