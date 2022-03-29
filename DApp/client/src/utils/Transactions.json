@@ -1,0 +1,228 @@
+[
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_Name",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_Category",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_Description",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_Location",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_Amount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_Status",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_Account",
+				"type": "string"
+			}
+		],
+		"name": "addApplication",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_num",
+				"type": "uint256"
+			}
+		],
+		"name": "deleteElement",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_num",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_Name",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_Category",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_Description",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_Location",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_Amount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_Status",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "_Account",
+				"type": "string"
+			}
+		],
+		"name": "setStatus",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "Applications",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "Name",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "Category",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "Description",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "Location",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "Amount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "Status",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "Account",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getAllTransactions",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "id",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "Name",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "Category",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "Description",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "Location",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "Amount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "Status",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "Account",
+						"type": "string"
+					}
+				],
+				"internalType": "struct Application.Application[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "num",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
