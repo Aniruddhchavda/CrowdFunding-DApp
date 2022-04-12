@@ -20,19 +20,20 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
   />
 );
 
+
 const Welcome = () => {
   const { currentAccount, connectWallet, handleChange, sendTransaction, formData, isLoading } = useContext(TransactionContext);
 
   const handleSubmit = (e) => {
-    const { name, category, description, location, amount, status } = formData;
+    const { name, category, description, location, amount } = formData;
 
     e.preventDefault();
 
-    if (!name || !category || !description || !location || !amount || !status) return;
+    if (!name || !category || !description || !location || !amount) return;
 
     sendTransaction();
   };
-
+  
   return (
     <div className="flex w-full justify-center items-center min-h-[90vh]">
       <div className="block mf:flex-row flex-col items-start justify-between md:p-20 py-12 px-4">
@@ -65,21 +66,56 @@ const Welcome = () => {
           <div className="p-5 sm:w-96 w-full flex flex-col justify-start items-center blue-glassmorphism">
             <Input placeholder="name" name="name" type="text" handleChange={handleChange} />
 
-            <select name="category" 
-            handleChange={handleChange}
-            onChange={(e) => handleChange(e, name)}
-    className="my-2 w-full rounded-sm p-2 outline-none bg-transparent text-white border-1 text-sm "
-            >
-              <option value="1">Medical</option>
-              <option value="2">Educational</option>
-              <option value="3">Travel</option>
-              <option value="4">Emergency</option>
+            <select name="category"
+    className="my-2 w-full rounded-sm p-2 outline-none bg-black text-white border-1 text-sm "
+    handleChange={handleChange}
+    onChange={(e) => handleChange(e, "category")}
+    >
+              <option value="1" >Accidents And Emergencies</option>
+              <option value="2" >Animals</option>
+              <option value="3" >Children</option>
+              <option value="4" >Celebration/Event</option>
+
+              <option value="5" >Community</option>
+              <option value="6" >Education</option>
+              <option value="7" >Environment</option>
+              <option value="8" >Funeral</option>
+
+              <option value="9" >Medical</option>
+              <option value="10" >Sports/Clubs</option>
+              <option value="11" >Volunteer/Service</option>
+              <option value="12" >Startup and Projects </option>
+
+              <option value="13" >Other</option>
             </select>
 
+
             <Input placeholder="description" name="description" type="text" handleChange={handleChange} />
-            <Input placeholder="location" name="location" type="text" handleChange={handleChange} />
+
+
+            <select name="location"
+    className="my-2 w-full rounded-sm p-2 outline-none bg-black text-white border-1 text-sm "
+    handleChange={handleChange}
+    onChange={(e) => handleChange(e, "location")}
+    >
+              <option value="1" >Lubbock</option>
+              <option value="2" >San Antonio</option>
+              <option value="3" >Dallas</option>
+              <option value="4" >Austin</option>
+
+              <option value="5" >Fort Worth</option>
+              <option value="6" >El Paso</option>
+              <option value="7" >Arlington</option>
+              <option value="8" >Corpus Christi</option>
+
+              <option value="9" >Plano</option>
+              <option value="10" >Houston</option>
+              <option value="11" >Other</option>
+
+            </select>
+
+
             <Input placeholder="amount" name="amount" type="number" handleChange={handleChange} />
-            <Input placeholder="status" name="status" type="number" handleChange={handleChange} />
             <div className="h-[1px] w-full bg-gray-400 my-2" />
 
             {isLoading

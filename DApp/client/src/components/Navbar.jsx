@@ -23,7 +23,9 @@ const Navbar = () => {
       <li className={`mx-4 cursor-pointer ${1}`}><Link to='/'>Home</Link></li>
       <li className={`mx-4 cursor-pointer ${2}`}><Link to='/add'>Create</Link></li>
       <li className={`mx-4 cursor-pointer ${3}`}><Link to='/application'>View Applications</Link></li>
-
+      {currentAccount &&
+      <li className={`mx-4 cursor-pointer ${3}`}><Link to='/account'>My Account</Link></li>
+      }
         {!currentAccount && (
             <button
               type="button"

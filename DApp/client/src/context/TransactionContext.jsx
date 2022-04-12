@@ -8,13 +8,14 @@ export const TransactionContext = React.createContext();
 const { ethereum } = window;
 
 export const TransactionsProvider = ({ children }) => {
-  const [formData, setformData] = useState({ name: "", category: 1, description: "", location: "", amount: 1, status:1 });
+  const [formData, setformData] = useState({ name: "", category: "", description: "", location: "", amount: 1, status:1 });
   const [currentAccount, setCurrentAccount] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [transactions, setTransactions] = useState([]);
 
   const handleChange = (e, name) => {
     setformData((prevState) => ({ ...prevState, [name]: e.target.value }));
+    console.log(e.target.value);
   };
 
 const checkIfWalletIsConnect = async () => {
@@ -61,9 +62,115 @@ const createEthereumContract = () => {
   const sendTransaction = async () => {
     try {
       if (ethereum) {
-        const { name,category, description,location,amount,status } = formData;
+        const { name,category, description,location,amount } = formData;
+        console.log(category);
         const transactionsContract = createEthereumContract();
-        const transactionHash = await transactionsContract.addApplication(name,category,description,location,amount,status,currentAccount);
+        const transactionHash = await transactionsContract.addApplication(name,category,description,location,0, amount,0,currentAccount);
+
+        setIsLoading(true);
+        console.log(`Loading - ${transactionHash.hash}`);
+        await transactionHash.wait();
+        console.log(`Success - ${transactionHash.hash}`);
+        setIsLoading(false);
+        window.location.reload();
+      } else {
+        console.log("No ethereum object");
+      }
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+
+  const updateAmount = async (num,AmountGathered) => {
+    try {
+      if (ethereum) {
+
+        const transactionsContract = createEthereumContract();
+        const transactionHash = await transactionsContract.setAmount(num,AmountGathered);
+
+        setIsLoading(true);
+        console.log(`Loading - ${transactionHash.hash}`);
+        await transactionHash.wait();
+        console.log(`Success - ${transactionHash.hash}`);
+        setIsLoading(false);
+        window.location.reload();
+      } else {
+        console.log("No ethereum object");
+      }
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+
+  const setUpvote = async (num) => {
+    try {
+      if (ethereum) {
+
+        const transactionsContract = createEthereumContract();
+        const transactionHash = await transactionsContract.setUpvote(num);
+
+        setIsLoading(true);
+        console.log(`Loading - ${transactionHash.hash}`);
+        await transactionHash.wait();
+        console.log(`Success - ${transactionHash.hash}`);
+        setIsLoading(false);
+        window.location.reload();
+      } else {
+        console.log("No ethereum object");
+      }
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+
+  const setDownvote = async (num) => {
+    try {
+      if (ethereum) {
+
+        const transactionsContract = createEthereumContract();
+        const transactionHash = await transactionsContract.setDownvote(num);
+
+        setIsLoading(true);
+        console.log(`Loading - ${transactionHash.hash}`);
+        await transactionHash.wait();
+        console.log(`Success - ${transactionHash.hash}`);
+        setIsLoading(false);
+        window.location.reload();
+      } else {
+        console.log("No ethereum object");
+      }
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+
+  const updateTransaction = async (num,status) => {
+    try {
+      if (ethereum) {
+
+        const transactionsContract = createEthereumContract();
+        const transactionHash = await transactionsContract.setStatus(num,status);
+
+        setIsLoading(true);
+        console.log(`Loading - ${transactionHash.hash}`);
+        await transactionHash.wait();
+        console.log(`Success - ${transactionHash.hash}`);
+        setIsLoading(false);
+        window.location.reload();
+      } else {
+        console.log("No ethereum object");
+      }
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+
+  const deleteTransaction = async (num) => {
+    try {
+      if (ethereum) {
+
+        const transactionsContract = createEthereumContract();
+        const transactionHash = await transactionsContract.deleteElement(num);
 
         setIsLoading(true);
         console.log(`Loading - ${transactionHash.hash}`);
@@ -88,13 +195,17 @@ const createEthereumContract = () => {
         const availableTransactions = await transactionsContract.getAllTransactions();
 
         const structuredTransactions = availableTransactions.map((transaction) => ({
+          Num : transaction.id,
           Name: transaction.Name,
           Category: transaction.Category,
           Description:transaction.Description,
           Location: transaction.Location,
+          AmountGathered : transaction.AmountGathered,
           Amount: transaction.Amount,
           Status: transaction.Status,
-          Account : transaction.Account
+          Account : transaction.Account,
+          Upvote : transaction.Upvote,
+          Downvote : transaction.Downvote
         }));
         setTransactions(structuredTransactions);
       } else {
@@ -125,6 +236,11 @@ const createEthereumContract = () => {
         sendTransaction,
         handleChange,
         formData,
+        updateTransaction,
+        deleteTransaction,
+        updateAmount,
+        setUpvote,
+        setDownvote
       }}
     >
       {children}
