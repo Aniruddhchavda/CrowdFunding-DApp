@@ -12,6 +12,8 @@ struct Application {
   uint Amount;
   uint Status;
   string Account;
+  uint Upvote;
+  uint Downvote;
 }
  
 mapping(uint => Application) public Applications;
@@ -22,7 +24,7 @@ uint public num;
   string calldata _Description, string calldata _Location, uint _AmountGathered, uint _Amount , uint _Status, string memory _Account) external
   {
     num ++;
-    Applications[num] = Application(num,_Name,_Category,_Description, _Location, _AmountGathered ,_Amount,_Status,_Account);
+    Applications[num] = Application(num,_Name,_Category,_Description, _Location, _AmountGathered ,_Amount,_Status,_Account,0,0);
   }
  
   function setStatus(uint _num, uint  _Status) external
@@ -34,7 +36,16 @@ uint public num;
   {
     Applications[_num].AmountGathered += _Amount ;
   }
- 
+
+  function setUpvote(uint _num) external
+  {
+    Applications[_num].Upvote += 1 ;
+  }
+
+  function setDownvote(uint _num) external
+  {
+    Applications[_num].Downvote += 1 ;
+  }
  
   function deleteElement(uint  _num) public
   {
