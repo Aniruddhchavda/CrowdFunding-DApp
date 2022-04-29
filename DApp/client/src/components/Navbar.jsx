@@ -26,6 +26,7 @@ const Navbar = () => {
       {currentAccount &&
       <li className={`mx-4 cursor-pointer ${3}`}><Link to='/account'>My Account</Link></li>
       }
+      <li className={`mx-4 cursor-pointer ${3}`}><Link to='/refund'>View Requests</Link></li>
         {!currentAccount && (
             <button
               type="button"

@@ -29,9 +29,36 @@ const startPayment = async ({ ether, addr }) => {
   }
 };
 
-const TransactionsCard = ( {Num, Name, Category, Description, Location, AmountGathered,Amount, Status, Account , Upvote , Downvote} ) => {
 
-  const { updateAmount , setUpvote, setDownvote } = useContext(TransactionContext);
+  const getAllRefunds = async () => {
+    try {
+      const { updateAmount , setUpvote, setDownvote, currentAccount, reduceAmount, createEthereumContract,setRefunds } = useContext(TransactionContext);
+      if (window.ethereum) {
+        const transactionsContract = createEthereumContract();
+
+        const availableTransactions = await transactionsContract.getAllRefunds();
+
+        const structuredRefunds = availableTransactions.map((refund) => ({
+          Num : refund.id,
+          Amount: refund.Amount,
+          Account : refund.Account
+        }));
+        setRefunds(structuredRefunds);
+      } else {
+        console.log("Ethereum is not present");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+  };
+
+const TransactionsCard = ( {Num,Amount, Account} ) => {
+
+
+  const { updateAmount , setUpvote, setDownvote, currentAccount, reduceAmount, createEthereumContract } = useContext(TransactionContext);
+
+  if(Account != currentAccount) return null;
 
   const handleSubmit1 = (e) => {
     e.preventDefault();
@@ -43,57 +70,22 @@ const TransactionsCard = ( {Num, Name, Category, Description, Location, AmountGa
     setDownvote(Num);
   };
 
-  const locations = {
-    1:'Lubbock',
-    2:'San Antonio',
-    3:'Dallas',
-    4:'Austin',
-    5:'Fort Worth',
-    6:'El Paso',
-    7:'Arlington',
-    8:'Corpus Christi',
-    9:'Plano',
-    10:'Houston',
-    11:'Other'
-  }
-
-  const categories = {
-    1:'Accidents & Emergencies',
-    2:'Animals',
-    3:'Children',
-    4:'Celebration/Event',
-    5:'Community',
-    6:'Education',
-    7:'Environment',
-    8:'Funeral',
-    9:'Medical',
-    10:'Sports/Clubs',
-    11:'Volunteer/Service',
-    12:'Startup and Projects ',
-    13:'Other'
-  }
-
-  const loc = locations[Category];
-  const cat = categories[Location];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = new FormData(e.target);
 
-    
-
-    await startPayment({
+    const p1 = startPayment({
       ether: data.get("ether"),
       addr: data.get("addr")
     });
 
-    await updateAmount(Num,data.get("ether"));
+    const p2 = reduceAmount(Num,data.get("ether"));
     
+    const result = Promise.all([p1,p2]);
+  
   };
 
-  if(Status != 1){
-    return null;
-  }
   return (
     <div className="bg-[#181918] m-4 flex flex-1
       2xl:min-w-[450px]
@@ -106,12 +98,8 @@ const TransactionsCard = ( {Num, Name, Category, Description, Location, AmountGa
       <div className="flex flex-col items-center w-full mt-3">
         <div className="display-flex justify-start w-full mb-6 p-2">
         <p className="text-white text-base">Account : {Account}</p>
-        <p className="text-white text-base">Name : {Name}</p>
-        <p className="text-white text-base">Category : {cat}</p>
-        <p className="text-white text-base">Description : {Description}</p>
-        <p className="text-white text-base">Location : {loc}</p>
         <p className="text-white text-base">Amount : {Amount.toString()}</p>
-        <ProgressBar className="flex flex-col items-center w-full mt-1 p-4 " completed={AmountGathered} maxCompleted={Amount}></ProgressBar>
+        <p className="text-white text-base">App No : {Num.toString()}</p>
         </div>
 
         
@@ -138,48 +126,41 @@ const TransactionsCard = ( {Num, Name, Category, Description, Location, AmountGa
                 name="ether"
                 type="text"
                 className="input input-bordered block w-full focus:ring focus:outline-none"
-                placeholder="Amount in ETH"
+                placeholder={Amount}
+                defaultValue={Amount}
               />
           <button type="submit">
-          <p className="text-[#37c7da] font-bold px-10 py-5 mt-3">Donate</p>
+          <p className="text-[#37c7da] font-bold px-10 py-5 mt-3">Provide Refund</p>
           </button>
           </form>
 
 
         </div>
-
-          <button type="button" value="true" onClick={handleSubmit1} className="bg-black p-3 px-10 py-5 w-full rounded-3xl mt-5 shadow-2xl">
-          <span className="text-[#37c7da] font-bold">Upvotes {Upvote.toString()}</span> 
-          </button>
-
-          <button type="button" value="true" onClick={handleSubmit2} className="bg-black p-3 px-10 py-5 w-full rounded-3xl mt-5 shadow-2xl">
-          <span className="text-[#37c7da] font-bold">Downvotes {Downvote.toString()}</span>
-          </button>
       </div>
     </div>
   );
 };
 
-const Transactions = () => {
-  const { transactions, currentAccount, updateAmount } = useContext(TransactionContext);
-
+const Refund = () => {
+  const { refunds, currentAccount, updateAmount } = useContext(TransactionContext);
+  getAllRefunds();
   return (
     <div className="min-h-[90vh] flex w-full justify-center items-center 2xl:px-20 gradient-bg-transactions">
       <div className="flex flex-col md:p-12 py-12 px-4">
         {currentAccount ? (
           <h3 className="text-white text-5xl text-center my-0">
-            Applications
+            Refund Requests
           </h3>
         ) : (
           <h3 className="text-white text-3xl text-center my-2">
-            Connect your account to see the latest applications
+            Connect your account to see the latest refund requests !
           </h3>
         )}
 <div>
 </div>
         <div className="flex flex-wrap justify-center items-center mt-10">
-          {[...transactions].sort((a,b) => b.Upvote - a.Upvote).map((transaction, i) => (
-            <TransactionsCard key={i} {...transaction} />
+          {[...refunds].map((refunds, i) => (
+            <TransactionsCard key={i} {...refunds} />
           ))}
         </div>
       </div>
@@ -187,4 +168,4 @@ const Transactions = () => {
   );
 };
 
-export default Transactions;
+export default Refund;

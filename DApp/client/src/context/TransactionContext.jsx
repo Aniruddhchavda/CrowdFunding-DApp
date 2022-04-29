@@ -12,6 +12,7 @@ export const TransactionsProvider = ({ children }) => {
   const [currentAccount, setCurrentAccount] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [transactions, setTransactions] = useState([]);
+  const [refunds, setRefunds] = useState([]);
 
   const handleChange = (e, name) => {
     setformData((prevState) => ({ ...prevState, [name]: e.target.value }));
@@ -86,7 +87,28 @@ const createEthereumContract = () => {
       if (ethereum) {
 
         const transactionsContract = createEthereumContract();
-        const transactionHash = await transactionsContract.setAmount(num,AmountGathered);
+        const transactionHash = await transactionsContract.setAmount(num,AmountGathered,currentAccount);
+
+        setIsLoading(true);
+        console.log(`Loading - ${transactionHash.hash}`);
+        await transactionHash.wait();
+        console.log(`Success - ${transactionHash.hash}`);
+        setIsLoading(false);
+        window.location.reload();
+      } else {
+        console.log("No ethereum object");
+      }
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+
+  const reduceAmount = async (num,AmountGathered) => {
+    try {
+      if (ethereum) {
+
+        const transactionsContract = createEthereumContract();
+        const transactionHash = await transactionsContract.reduceAmount(num,AmountGathered,currentAccount);
 
         setIsLoading(true);
         console.log(`Loading - ${transactionHash.hash}`);
@@ -187,6 +209,50 @@ const createEthereumContract = () => {
   };
 
 
+  // const getAllTransactions = async () => {
+  //   try {
+  //     if (ethereum) {
+  //       const transactionsContract = createEthereumContract();
+
+  //       const p1 = transactionsContract.getAllTransactions();
+  //       const p2 = transactionsContract.getAllRefunds();
+
+  //       const result = Promise.all([p1,p2])
+  //       .then(([availableTransactions,availableRefunds]) => {
+  //         const structuredTransactions = availableTransactions.map((transaction) => ({
+  //         Num : transaction.id,
+  //         Name: transaction.Name,
+  //         Category: transaction.Category,
+  //         Description:transaction.Description,
+  //         Location: transaction.Location,
+  //         AmountGathered : transaction.AmountGathered,
+  //         Amount: transaction.Amount,
+  //         Status: transaction.Status,
+  //         Account : transaction.Account,
+  //         Upvote : transaction.Upvote,
+  //         Downvote : transaction.Downvote
+  //       }))
+  //       const structuredRefunds = availableRefunds.map((refund) => ({
+  //         Num : refund.id,
+  //         Amount: refund.Amount,
+  //         Account : refund.Account
+  //       }))
+  //       setTransactions(structuredTransactions);
+  //       setRefunds(structuredRefunds);
+  //     })
+
+  //   }
+
+
+  //     else {
+  //       console.log("Ethereum is not present");
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+
+  // };
+
   const getAllTransactions = async () => {
     try {
       if (ethereum) {
@@ -208,6 +274,8 @@ const createEthereumContract = () => {
           Downvote : transaction.Downvote
         }));
         setTransactions(structuredTransactions);
+
+
       } else {
         console.log("Ethereum is not present");
       }
@@ -217,6 +285,66 @@ const createEthereumContract = () => {
 
   };
 
+  const getRefund = async (num) => {
+    try {
+      if (ethereum) {
+        const transactionsContract = createEthereumContract();
+
+        const availableTransactions = await transactionsContract.refund(num,currentAccount);
+        console.log(availableTransactions);
+        return availableTransactions;
+      } else {
+        console.log("Ethereum is not present");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+  };
+
+  const createRefundRequest = async (num,amount) => {
+    try {
+      if (ethereum) {
+
+        const transactionsContract = createEthereumContract();
+        const transactionHash = await transactionsContract.requestRefund(num,amount,currentAccount);
+
+        setIsLoading(true);
+        console.log(`Loading - ${transactionHash.hash}`);
+        await transactionHash.wait();
+        console.log(`Success - ${transactionHash.hash}`);
+        setIsLoading(false);
+        window.location.reload();
+      } else {
+        console.log("No ethereum object");
+      }
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+
+  // const getAllRefunds = async () => {
+  //   try {
+  //     if (ethereum) {
+  //       const transactionsContract = createEthereumContract();
+
+  //       const availableTransactions = await transactionsContract.getAllRefunds();
+
+  //       const structuredRefunds = availableTransactions.map((refund) => ({
+  //         Num : refund.id,
+  //         Amount: refund.Amount,
+  //         Account : refund.Account
+  //       }));
+  //       setRefunds(structuredRefunds);
+  //     } else {
+  //       console.log("Ethereum is not present");
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+
+  // };
+
 
 
 
@@ -224,6 +352,7 @@ const createEthereumContract = () => {
   useEffect(() => {
     checkIfWalletIsConnect();
     getAllTransactions();
+    // getAllRefunds();
   });
 
   return (
@@ -240,7 +369,13 @@ const createEthereumContract = () => {
         deleteTransaction,
         updateAmount,
         setUpvote,
-        setDownvote
+        setDownvote,
+        getRefund,
+        createRefundRequest,
+        refunds,
+        reduceAmount,
+        createEthereumContract,
+        setRefunds
       }}
     >
       {children}

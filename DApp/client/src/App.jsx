@@ -1,4 +1,4 @@
-import { Navbar, Welcome, Footer, Services, Transactions,Admin , Account} from "./components";
+import { Navbar, Welcome, Footer, Services, Transactions,Admin , Account, Refund} from "./components";
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 
 const App = () => {
@@ -18,6 +18,15 @@ const App = () => {
         <div className="gradient-bg-welcome">
        <Navbar />
        <Transactions/>
+       </div>
+       </div>
+      }/>
+
+<Route path='/refund' element={
+        <div className="min-h-screen">
+        <div className="gradient-bg-welcome">
+       <Navbar />
+       <Refund/>
        </div>
        </div>
       }/>
